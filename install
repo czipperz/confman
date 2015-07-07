@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+sudo cp confman /bin
