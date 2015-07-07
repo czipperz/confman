@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+if (( $# != 1 )); then
+    echo "Only argument is the configuration file. See "
+    exit 1
+fi
+numLines="$(cat $1 | wc -l)"
+basedir="$(head -n 1 $1 | tail -n 1)"
+
+for (( i=2; i <= $numLines + 1; i++ )); do
+    line="$(head -n $i $1 | tail -n 1)"
+    if [ -n "$line" ]; then
+	first="$(echo $line | perl -pe "s/^(?:\"(.*)\"|'(.*)'|([^ ]+)).*$/\$1\$2\$3/")"
+	second="$(echo $line | perl -pe "s/^.*?(?:\"(.*)\"|'(.*)'|([^ ]+))$/\$1\$2\$3/")"
+	[ -e "$(eval echo "$second")" ] && mv "$(eval echo "$second")" "$(eval echo "$second.backup")"
+	ln -s "$(eval echo "$basedir/$first")" "$(eval echo "$second")"
+    fi
+done
