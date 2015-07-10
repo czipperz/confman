@@ -8,7 +8,7 @@ basedir="$(head -n 1 $1 | tail -n 1)"
 
 for (( i=2; i <= $numLines + 1; i++ )); do
     line="$(head -n $i $1 | tail -n 1)"
-    if [ -n "$line" ]; then
+    if [ ! -z "$line" ]; then
 	first="$(echo $line | perl -pe "s/^(?:\"(.*)\"|'(.*)'|([^ ]+)).*$/\$1\$2\$3/")"
 	second="$(echo $line | perl -pe "s/^.*?(?:\"(.*)\"|'(.*)'|([^ ]+))$/\$1\$2\$3/")"
 	[ -e "$(eval echo "$second")" ] && mv "$(eval echo "$second")" "$(eval echo "$second.backup")"
