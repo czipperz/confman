@@ -15,6 +15,28 @@ if [ $# == 0 -o "$1" == "-h" -o "$1" == "--help" ]; then
     echo "Example: \`confman -c configuration'"
     exit 1
 fi
+
+if [ "$1" == "-n" ]; then
+    function routine() {
+	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+	    && echo "mv \"$(eval echo "$2")\" \"$(eval echo "$2.backup")\""
+	echo "ln -s \"$(eval echo "$basedir/$1")\" \"$(eval echo "$2")\""
+    }
+    shift
+elif [ "$1" == "-c" ]; then
+    function routine() {
+	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+	    && rm "$(eval echo "$2")" "$(eval echo "$2.backup")"
+    }
+    shift
+else
+    function routine() {
+	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+	    && mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
+	ln -s "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
+    }
+fi
+
 numLines="$(cat "$1" | wc -l)"
 basedir="$(head -n 1 "$1" | tail -n 1)"
 
@@ -23,8 +45,6 @@ for (( i=2; i <= $numLines + 1; i++ )); do
     if [ ! -z "$line" ]; then
 	first="$(echo "$line" | perl -pe "s/^(?:\"(.*)\"|'(.*)'|([^ ]+)).*$/\$1\$2\$3/")"
 	second="$(echo "$line" | perl -pe "s/^.*?(?:\"(.*)\"|'(.*)'|([^ ]+))$/\$1\$2\$3/")"
-	[ -e "$(eval echo "$second")" -o -L "$(eval echo "$second")" ] \
-	    && mv "$(eval echo "$second")" "$(eval echo "$second.backup")"
-	ln -s "$(eval echo "$basedir/$first")" "$(eval echo "$second")"
+	routine "$first" "$second"
     fi
 done
