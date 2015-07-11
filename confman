@@ -26,7 +26,7 @@ if [ "$1" == "-n" ]; then
 elif [ "$1" == "-c" ]; then
     function routine() {
 	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
-	    && rm "$(eval echo "$2")" "$(eval echo "$2.backup")"
+	    && rm "$(eval echo "$2.backup")"
     }
     shift
 else
