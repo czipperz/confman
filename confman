@@ -1,10 +1,11 @@
 #!/usr/bin/bash
-if (( $# != 1 )); then
+if [ $# == 0 -o "$1" == "-h" -o "$1" == "--help" ]; then
     echo "          confman"
     echo '          /// \\\'
     echo "configuration manager"
     echo ""
     echo "Usage:"
+    echo "-h | --help | no arguments = show this message"
     echo "Two options are allowed:"
     echo "   -n | --nono  = list what it would do but don't do it"
     echo "   -c | --clean = cleanup (delete) the backup files it would normally generate. DOES NOT do anything else"
