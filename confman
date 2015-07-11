@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 if (( $# != 1 )); then
-    echo "Only argument is the configuration file. See "
+    echo "Only argument is the configuration file."
     exit 1
 fi
 numLines="$(cat $1 | wc -l)"
