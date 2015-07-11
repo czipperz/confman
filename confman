@@ -1,6 +1,16 @@
 #!/usr/bin/bash
 if (( $# != 1 )); then
-    echo "Only argument is the configuration file."
+    echo "          confman"
+    echo '          /// \\\'
+    echo "configuration manager"
+    echo ""
+    echo "Usage:"
+    echo "Two options are allowed:"
+    echo "   -n | --nono  = list what it would do but don't do it"
+    echo "   -c | --clean = cleanup (delete) the backup files it would normally generate. DOES NOT do anything else"
+    echo "Then you must specify the configuration file to read."
+    echo ""
+    echo "Example: \`confman -c configuration'"
     exit 1
 fi
 numLines="$(cat $1 | wc -l)"
