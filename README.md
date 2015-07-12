@@ -20,3 +20,8 @@ to `<their name>.backup`.
 
 Due to how the file is parsed, the directory to prepend to the first argument
 must be on the first line of the file: no whitespace is allowed before it.
+
+##Options
+
+* `-n` or `--nono` - lists what processes it would execute.
+* `-c` or `--clean` - cleanup (delete) the backup files it would normally generate. DOES NOT do anything else.
