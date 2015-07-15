@@ -6,9 +6,10 @@ if [ $# == 0 -o "$1" == "-h" -o "$1" == "--help" ]; then
     echo ""
     echo "Usage:"
     echo "-h | --help | no arguments = show this message"
-    echo "Two options are allowed:"
+    echo "Three options are allowed:"
     echo "    -n | --nono  = list what it processes it would execute."
     echo "    -c | --clean = cleanup (delete) the backup files it would normally generate. DOES NOT do anything else."
+    echo "    -h | --hard  = \`ln' the files instead of \`ln -s'"
     echo "  They are mutually exclusive!"
     echo "Then you must specify the configuration file to read."
     echo ""
@@ -29,6 +30,12 @@ elif [ "$1" == "-c" ]; then
 	    && rm "$(eval echo "$2.backup")"
     }
     shift
+elif [ "$1" == "-h" ]; then
+    function routine() {
+	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+	    && mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
+	ln "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
+    }
 else
     function routine() {
 	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \

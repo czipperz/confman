@@ -25,3 +25,4 @@ must be on the first line of the file: no whitespace is allowed before it.
 
 * `-n` or `--nono` - lists what processes it would execute.
 * `-c` or `--clean` - cleanup (delete) the backup files it would normally generate. DOES NOT do anything else.
+* `-h` or `--hard` - `ln` the files instead of `ln -s`
