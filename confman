@@ -17,32 +17,38 @@ if [ $# == 0 -o "$1" == "-h" -o "$1" == "--help" ]; then
     exit 1
 fi
 
-if [ "$1" == "-n" ]; then
-    function routine() {
-	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
-	    && echo "mv \"$(eval echo "$2")\" \"$(eval echo "$2.backup")\""
-	echo "ln -s \"$(eval echo "$basedir/$1")\" \"$(eval echo "$2")\""
-    }
-    shift
-elif [ "$1" == "-c" ]; then
-    function routine() {
-	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
-	    && rm "$(eval echo "$2.backup")"
-    }
-    shift
-elif [ "$1" == "-h" ]; then
-    function routine() {
-	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
-	    && mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
-	ln "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
-    }
-else
-    function routine() {
-	[ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
-	    && mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
-	ln -s "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
-    }
-fi
+case "$1" in
+    -n|--nono)
+	function routine() {
+	    [ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+		&& echo "mv \"$(eval echo "$2")\" \"$(eval echo "$2.backup")\""
+	    echo "ln -s \"$(eval echo "$basedir/$1")\" \"$(eval echo "$2")\""
+	}
+	shift
+	;;
+    -c|--clean)
+	function routine() {
+	    [ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+		&& rm "$(eval echo "$2.backup")"
+	}
+	shift
+	;;
+    -h|--hard)
+	function routine() {
+	    [ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+		&& mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
+	    ln "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
+	}
+	shift
+	;;
+    *)
+	function routine() {
+	    [ -e "$(eval echo "$2")" -o -L "$(eval echo "$2")" ] \
+		&& mv "$(eval echo "$2")" "$(eval echo "$2.backup")"
+	    ln -s "$(eval echo "$basedir/$1")" "$(eval echo "$2")"
+	}
+	;;
+esac
 
 numLines="$(cat "$1" | wc -l)"
 basedir="$(head -n 1 "$1" | tail -n 1)"
