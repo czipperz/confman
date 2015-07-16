@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 if [ $# == 0 -o "$1" == "-h" -o "$1" == "--help" ]; then
     echo "          confman"
     echo '          /// \\\'
