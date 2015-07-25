@@ -28,7 +28,7 @@ case "$1" in
 	;;
     -c|--clean)
 	function routine() {
-	    [ -e "$(eval echo "$2.backup")" -o -L "$(eval echo "$2.backup")" ]
+	    [ -e "$(eval echo "$2.backup")" -o -L "$(eval echo "$2.backup")" ] \
 		&& rm "$(eval echo "$2.backup")"
 	}
 	shift
