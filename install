@@ -1,2 +1,14 @@
 #!/bin/bash
 sudo cp confman /bin
+if [ -e /bin/zsh ]; then
+    printf "ZSH is detected, will install confman completions to "
+    if [ -d "$HOME/.oh-my-zsh" ]; then
+	echo "\`$HOME/.oh-my-zsh'"
+	mkdir -p "$HOME/.oh-my-zsh/functions"
+	cp _confman "$HOME/.oh-my-zsh/functions"
+    else
+	echo "\`$HOME/.zsh/functions'"
+	mkdir -p "$HOME/.zsh/functions"
+	cp _confman "$HOME/.zsh/functions"
+    fi
+fi

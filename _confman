@@ -1,0 +1,13 @@
+#compdef b
+
+local arguments curcontext="$curcontext"
+typeset -A opt_args
+
+arguments=(
+    {--nono,-n}'[Lists what processes it would execute.]'
+    {--clean,-c}'[Cleanup (delete) the backup files it would normally generate. DOES NOT do anything else]'
+    {--hard,-h}'[`ln` the files instead of `ln -s`]'
+)
+_arguments -s $arguments && return 0
+
+return 1
