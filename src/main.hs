@@ -1,6 +1,5 @@
 import System.Environment
 import System.Exit
-import Control.Monad
 
 data Flag = Nono | Clean | Hard | Help deriving (Eq,Ord,Enum,Show,Bounded)
 
