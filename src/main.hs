@@ -1,5 +1,9 @@
+module Main where
+
 import System.Environment
 import System.Exit
+
+import Help
 
 data Flag = Nono | Clean | Hard | Help deriving (Eq,Ord,Enum,Show,Bounded)
 
@@ -46,20 +50,3 @@ isValidTwo (Left _) (Left _)   = error "Takes one file and possibly one option, 
 isValidOne (Left _)     = return ()
 isValidOne (Right Help) = help >> exitWith (ExitFailure 1)
 isValidOne _            = error "Use `--help' to get help"
-
-help = do
-  putStrLn "          confman"
-  putStrLn "          /// \\\\\\"
-  putStrLn "configuration manager"
-  putStrLn ""
-  putStrLn "Usage:"
-  putStrLn "    --help | no arguments = show this message"
-  putStrLn "Three options are allowed:"
-  putStrLn "    -n | --nono  = list what it processes it would execute."
-  putStr   "    -c | --clean = cleanup (delete) the backup files it"
-  putStrLn "would normally generate. DOES NOT do anything else."
-  putStrLn "    -h | --hard  = `ln' the files instead of `ln -s'"
-  putStrLn "  They are mutually exclusive!"
-  putStrLn "Then you must specify the configuration file to read."
-  putStrLn ""
-  putStrLn "Example: `confman -c configuration')"
