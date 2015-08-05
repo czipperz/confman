@@ -1,8 +1,8 @@
 module Main where
 
 import System.Environment
-import System.Exit
 
+import ParseWord
 import Help
 
 data Flag = Nono | Clean | Hard | Help deriving (Eq,Ord,Enum,Show,Bounded)
@@ -15,22 +15,25 @@ main = do
   case length arg of
     2 -> isValidTwo first second
     1 -> isValidOne first
+    0 -> help
   contents <- readFile (first <-> second)
   putStrLn contents
   putStrLn ""
-  sayFirstWordsLines (lines contents) False
+  sayWords (lines contents) False
   return ()
-  where sayFirstWordsLines [] _ = return ()
-        sayFirstWordsLines (x:xs) True =
+
+  where sayWords [] _ = return ()
+        sayWords ([]:xs) _ = sayWords xs True
+        sayWords (x:xs) True =
           let (word1,start) = parseWord 0 x
-              (word2,_) = parseWord start x in
+              (word2,_)     = parseWord start x in
           do putStrLn word1
              putStrLn $ "  " ++ word2
-             sayFirstWordsLines xs True
-        sayFirstWordsLines (x:xs) False =
+             sayWords xs True
+        sayWords (x:xs) False =
           let (word1,start) = parseWord 0 x in
           do putStrLn word1
-             sayFirstWordsLines xs True
+             sayWords xs True
 
 (Left x) <-> _ = x
 _ <-> (Left x) = x
@@ -44,9 +47,9 @@ parseS s
 
 isValidTwo (Right _) (Left _)  = return ()
 isValidTwo (Right _) (Right _) = error "Takes one file and possibly one option, not two options"
-isValidTwo (Left _) (Right _)  = error "Takes one file and possibly one option, in that order"
-isValidTwo (Left _) (Left _)   = error "Takes one file and possibly one option, not two files"
+isValidTwo (Left _)  (Right _) = error "Takes one file and possibly one option, in that order"
+isValidTwo (Left _)  (Left _)  = error "Takes one file and possibly one option, not two files"
 
 isValidOne (Left _)     = return ()
-isValidOne (Right Help) = help >> exitWith (ExitFailure 1)
+isValidOne (Right Help) = help
 isValidOne _            = error "Use `--help' to get help"
