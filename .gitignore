@@ -1,1 +1,4 @@
 out
+hs-confman
+*.o
+*.hi
