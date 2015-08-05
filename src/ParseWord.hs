@@ -1,10 +1,10 @@
-module ParseWord ( parseWord ) where
+module ParseWord where
 
 parseWord :: (Eq η,Num η,Num α) => η -> String -> (String,α)
 parseWord start line = goForward $ byepassWhitespace $ cropTo start line
-  where cropTo 0 line   = line
+  where cropTo 0 li     = li
         cropTo _ []     = error "Can't parse word"
-        cropTo n (x:xs) = cropTo (n-1) xs
+        cropTo n (_:xs) = cropTo (n-1) xs
 
         byepassWhitespace [] = error "Can't remove whitespace between words"
         byepassWhitespace (' ':xs) = byepassWhitespace xs
