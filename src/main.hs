@@ -17,10 +17,10 @@ main = do
     1 -> isValidOne first
     0 -> help
   contents <- readFile (first <-> second)
-  sayWords (lines contents) False
+  let filtered = removeEmptyLists (lines contents)
+  sayWords filtered False
 
   where sayWords [] _         = return ()
-        sayWords ([]:xs) _    = sayWords xs True
         sayWords (x :xs) True =
           let (word1,start) = parseWord 0 x
               (word2,_)     = parseWord start x in
@@ -35,6 +35,11 @@ main = do
 (<->) :: Either t a -> Either t b -> t
 (Left x) <-> _ = x
 _ <-> (Left x) = x
+
+removeEmptyLists :: [[x]] -> [[x]]
+removeEmptyLists []      = []
+removeEmptyLists ([]:xs) =   removeEmptyLists xs
+removeEmptyLists (x :xs) = x:removeEmptyLists xs
 
 parseS :: String -> Either String Flag
 parseS s
