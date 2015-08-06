@@ -4,8 +4,7 @@ import System.Environment
 
 import ParseWord
 import Help
-
-data Flag = Nono | Clean | Hard | Help deriving (Eq,Ord,Enum,Show,Bounded)
+import Flag
 
 main :: IO ()
 main = do
