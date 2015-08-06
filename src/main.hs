@@ -5,35 +5,31 @@ import System.Environment
 import ParseWord
 import Help
 import Flag
+import Procedure
 
 main :: IO ()
 main = do
   arg <- getArgs
-  let first  = parseS (arg !! 0)
-      second = parseS (arg !! 1)
+  let first  = parseS $ arg !! 0
+      second = parseS $ arg !! 1
   case length arg of
-    2 -> isValidTwo first second
-    1 -> isValidOne first
     0 -> help
+    1 -> isValidOne first
+    2 -> isValidTwo first second
   contents <- readFile (first <-> second)
-  let filtered = removeEmptyLists (lines contents)
-  sayWords filtered False
+  let filtered = removeEmptyLists $ lines contents
+      parsed   = parseW filtered
+  case length arg of
+    1 -> procedure (head parsed) (tail parsed)
+    2 -> procedureFlag (head parsed) (first <+> second) (tail parsed)
 
-  where sayWords [] _         = return ()
-        sayWords (x :xs) True =
-          let (word1,start) = parseWord 0 x
-              (word2,_)     = parseWord start x in
-          do putStrLn word1
-             putStrLn $ "  " ++ word2
-             sayWords xs True
-        sayWords (x:xs) False =
-          let (word1,_) = parseWord 0 x in
-          do putStrLn word1
-             sayWords xs True
-
-(<->) :: Either t a -> Either t b -> t
+(<->) :: Either t a -> Either t b -> t -- get file
 (Left x) <-> _ = x
 _ <-> (Left x) = x
+
+(<+>) :: Either a t -> Either b t -> t -- get flag
+(Right x) <+> _ = x
+_ <+> (Right x) = x
 
 removeEmptyLists :: [[x]] -> [[x]]
 removeEmptyLists []      = []
@@ -47,6 +43,17 @@ parseS s
   | s == "-h" || s == "--hard"  = Right Hard
   | s == "--help"               = Right Help
   | otherwise                   = Left s
+
+parseW :: [String] -> [String]
+parseW str = parseW' False str
+  where parseW' False ([]:_) = error $ "The first line needs to be nonempty: " ++
+                               "it is the prefix. Use `.' to imply nothing"
+        parseW' True [] = []
+        parseW' False (x:xs) = x:parseW' True xs
+        parseW' True  (x:xs) =
+          let (a,pos) = parseWord 0 x
+              (b,_)   = parseWord pos x in
+          a:b:parseW' True xs
 
 isValidTwo :: Monad m => Either a b -> Either c d -> m ()
 isValidTwo (Right _) (Left  _) = return ()
