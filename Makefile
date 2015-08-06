@@ -1,5 +1,5 @@
-all: out/main.o
-	ghc -o hs-confman $^
+all:
+	(cd src && ghc --make -o ../hs-confman main.hs)
 
 out/%.o: src/%.hs
 	@mkdir -p out
