@@ -1,6 +1,6 @@
 module ParseWord where
 
-parseWord :: (Eq η,Num η,Num α) => η -> String -> (String,α)
+parseWord :: (Eq n, Num n, Num a) => n -> String -> (String,a)
 parseWord start line = goForward $ byepassWhitespace $ cropTo start line
   where cropTo 0 li     = li
         cropTo _ []     = error "Can't parse word"
