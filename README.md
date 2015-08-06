@@ -10,7 +10,7 @@ file of the form:
 	$HOME/dotfiles
     zsh/zshrc                     $HOME/.zshrc
 	rc.lua                        $HOME/.config/awesome/rc.lua   # note how you NEED to write rc.lua in both places.
-    "space delimiated/with 's"    'space delimiated/with "s'
+    'space delimiated/with "s'    not_space_delimiated/with"'(s)/more/path
 
 This allows you to just specify the (dotfiles) directory as the first line,
 then use relative paths for the first argument but absolute paths for the second.

@@ -2,5 +2,5 @@ $HOME/dotfiles
 
 "zsh/zshrc ' space"   $HOME/.zshrc
 
-zsh/zlogin            '$HOME/.zlogin " space'
+zsh/zlogin            "$HOME/.zlogin ' space"
 xinitrc               $HOME/.xinitrc
