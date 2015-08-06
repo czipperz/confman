@@ -49,10 +49,10 @@ parseS s
   | otherwise                   = Left s
 
 isValidTwo :: Monad m => Either a b -> Either c d -> m ()
-isValidTwo (Right _) (Left _)  = return ()
+isValidTwo (Right _) (Left  _) = return ()
 isValidTwo (Right _) (Right _) = error "Takes one file and possibly one option, not two options"
-isValidTwo (Left _)  (Right _) = error "Takes one file and possibly one option, in that order"
-isValidTwo (Left _)  (Left _)  = error "Takes one file and possibly one option, not two files"
+isValidTwo (Left  _) (Right _) = error "Takes one file and possibly one option, in that order"
+isValidTwo (Left  _) (Left  _) = error "Takes one file and possibly one option, not two files"
 
 isValidOne :: Either t Flag -> IO ()
 isValidOne (Left _)     = return ()
