@@ -17,27 +17,26 @@ main = do
     1 -> isValidOne first
     0 -> help
   contents <- readFile (first <-> second)
-  putStrLn contents
-  putStrLn ""
   sayWords (lines contents) False
-  return ()
 
-  where sayWords [] _ = return ()
-        sayWords ([]:xs) _ = sayWords xs True
-        sayWords (x:xs) True =
+  where sayWords [] _         = return ()
+        sayWords ([]:xs) _    = sayWords xs True
+        sayWords (x :xs) True =
           let (word1,start) = parseWord 0 x
               (word2,_)     = parseWord start x in
           do putStrLn word1
              putStrLn $ "  " ++ word2
              sayWords xs True
         sayWords (x:xs) False =
-          let (word1,start) = parseWord 0 x in
+          let (word1,_) = parseWord 0 x in
           do putStrLn word1
              sayWords xs True
 
+(<->) :: Either t a -> Either t b -> t
 (Left x) <-> _ = x
 _ <-> (Left x) = x
 
+parseS :: String -> Either String Flag
 parseS s
   | s == "-n" || s == "--nono"  = Right Nono
   | s == "-c" || s == "--clean" = Right Clean
@@ -45,11 +44,13 @@ parseS s
   | s == "--help"               = Right Help
   | otherwise                   = Left s
 
+isValidTwo :: Monad m => Either a b -> Either c d -> m ()
 isValidTwo (Right _) (Left _)  = return ()
 isValidTwo (Right _) (Right _) = error "Takes one file and possibly one option, not two options"
 isValidTwo (Left _)  (Right _) = error "Takes one file and possibly one option, in that order"
 isValidTwo (Left _)  (Left _)  = error "Takes one file and possibly one option, not two files"
 
+isValidOne :: Either t Flag -> IO ()
 isValidOne (Left _)     = return ()
 isValidOne (Right Help) = help
 isValidOne _            = error "Use `--help' to get help"
