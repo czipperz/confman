@@ -3,7 +3,7 @@ all:
 	@(cd src && ghc --make -o ../confman main.hs)
 
 install: all
-	cp confman /bin
+	./install
 
 clean:
 	rm src/*.{o,hi}
