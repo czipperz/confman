@@ -6,6 +6,7 @@ import ParseWord
 import Help
 import Flag
 import Procedure
+import SystemParse
 
 main :: IO ()
 main = do
@@ -19,9 +20,10 @@ main = do
   contents <- readFile (first <-> second)
   let filtered = removeEmptyLists $ lines contents
       parsed   = parseW filtered
+  prefix <- systemParse $ head parsed
   case length arg of
-    1 -> procedure (head parsed) (tail parsed)
-    2 -> procedureFlag (head parsed) (first <+> second) (tail parsed)
+    1 -> procedure     (prefix) (tail parsed)
+    2 -> procedureFlag (prefix) (first <+> second) (tail parsed)
 
 (<->) :: Either t a -> Either t b -> t -- get file
 (Left x) <-> _ = x
