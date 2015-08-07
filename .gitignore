@@ -1,4 +1,4 @@
 out
-hs-confman
+confman
 *.o
 *.hi
