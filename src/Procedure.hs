@@ -9,43 +9,48 @@ import System.Process
     * copyfile
 -}
 import Flag
+import SystemParse
 
-procedureFlag :: String -> Flag -> [String] -> IO ()
+procedureFlag :: String -> Flag -> [FilePath] -> IO ()
 procedureFlag _ _ []  = return ()
-procedureFlag _ _ [x] = error "Need more than just prefix declaration"
+procedureFlag _ _ [_] = error "Need more than just prefix declaration"
 procedureFlag pre Nono (src:out:xs) = do
-  let fileNameUn = out ++ ".backup"
+  fileNameUn <- systemParse $ out ++ ".backup"
   exists <- doesFileExist fileNameUn
   if exists
-    then putStr $ "rm " ++ fileNameUn
+    then putStrLn $ "rm " ++ fileNameUn
     else return ()
   putStrLn $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedureFlag pre Nono xs
 procedureFlag pre Clean (_:out:xs) = do
-  exists <- doesFileExist $ out ++ ".backup"
+  fileNameUn <- systemParse $ out ++ ".backup"
+  exists <- doesFileExist fileNameUn
   if exists
-    then callCommand $ "rm " ++ out
+    then callCommand $ "rm \"" ++ fileNameUn ++ "\""
     else return ()
   procedureFlag pre Clean xs
 procedureFlag pre Hard (src:out:xs) = do
-  exists <- doesFileExist out
+  fileNameUn <- systemParse out
+  exists <- doesFileExist $ fileNameUn ++ ".backup"
   if exists
-    then callCommand $ "mv \"" ++ out ++ "\" \"" ++ out ++ ".backup\""
+    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
+         fileNameUn ++ ".backup\""
     else return ()
-  callCommand $ "ln \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ out ++ ".backup" ++ "\""
+  callCommand $ "ln \"" ++ pre ++ "/" ++ src
+                ++ "\" \"" ++ fileNameUn ++ ".backup\""
   procedureFlag pre Hard xs
 
 
+procedure :: String -> [FilePath] -> IO ()
+procedure _ []  = return ()
+procedure _ [_] = error "Need more than just prefix declaration"
 procedure pre (src:out:xs) = do
-  exists <- doesFileExist out
+  fileNameUn <- systemParse out
+  exists <- doesFileExist $ fileNameUn
   if exists
-    then callCommand $ "mv \"" ++ out ++ "\" \"" ++ out ++ ".backup\""
+    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
+         fileNameUn ++ ".backup\""
     else return ()
-  callCommand $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ out ++ ".backup" ++ "\""
+  callCommand $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++
+    fileNameUn ++ "\""
   procedure pre xs
-
-
-removeIfExists :: FilePath -> IO ()
-removeIfExists name = removeFile name `catch` handler
-  where handler e | isDoesNotExistError e = return ()
-                  | otherwise = throwIO e
