@@ -12,7 +12,6 @@ parseWord start line = goForward . byepassWhitespace $ cropTo start line
         byepassWhitespace (x   :xs) = x:xs
 
         goForward ('\'':xs) = walkTo '\'' (xs,2)
-        goForward ('"' :xs) = walkTo '"'  (xs,2)
         goForward xs        = walkTo ' '  (xs,0)
 
         walkTo _ ([]    ,n)             = ([],n)
