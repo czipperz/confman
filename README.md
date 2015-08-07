@@ -33,5 +33,4 @@ must be on the first line of the file: no whitespace is allowed before it.
 
 * `git clone` the project
 * `cd` into the directory
-* `make`
-* `sudo make install`
+* `make install`
