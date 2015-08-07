@@ -1,5 +1,6 @@
 all:
-	(cd src && ghc --make -o ../hs-confman main.hs)
+	@echo "ghc --make -o ../confman main.hs"
+	@(cd src && ghc --make -o ../confman main.hs)
 
 install: all
 	cp confman /bin
