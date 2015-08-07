@@ -1,10 +1,7 @@
 module Procedure (procedureFlag,procedure) where
 
 import System.Directory
-import Control.Exception
-import System.IO.Error
 import System.Process
-import System.Environment
 {- Methods to use
     * callCommand
     * removeFile
