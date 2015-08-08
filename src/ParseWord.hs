@@ -16,7 +16,6 @@ parseWord start line = goForward . byepassWhitespace $ cropTo start line
         goForward xs        = walkTo ' '  (xs,0)
 
         walkTo _ ([]    ,n)             = ([],n)
-        walkTo _ (('"':xs),_)           = error "Use of doulbe quotes in the string body is NOT allowed"
         walkTo c ((x:xs),n) | c == x    = ([],n)
                             | otherwise = let y = walkTo c (xs,n) in
                                             (x:fst y, 1+snd y)
