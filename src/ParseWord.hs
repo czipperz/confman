@@ -11,11 +11,15 @@ parseWord start = goForward . byepassWhitespace . cropTo start
         byepassWhitespace ('\t':xs) = byepassWhitespace xs
         byepassWhitespace (x   :xs) = x:xs
 
-        goForward ('\'':xs) = walkTo '\'' (xs,2)
-        goForward ('"' :xs) = error "Use of double quotes as the start of a group of words is NOT allowed"
-        goForward xs        = walkTo ' '  (xs,0)
+        goForward (x:xs) | x == '\'' || x == '"'
+                             = walkTo x   (xs,2)
+        goForward xs         = walkTo ' ' (xs,0)
 
-        walkTo _ ([]    ,n)             = ([],n)
-        walkTo c ((x:xs),n) | c == x    = ([],n)
-                            | otherwise = let y = walkTo c (xs,n) in
-                                            (x:fst y, 1+snd y)
+        walkTo :: Num n => Char -> (String,n) -> (String,n)
+        walkTo _      ([]       ,n)          = ([],n)
+        walkTo c      (x:_      ,n) | c == x = ([],n)
+        walkTo c@'"'  ('\\':x:xs,n) | x == '"' || x == '\\'
+                                     = commonWalk c x xs n
+        walkTo c      (x:xs     ,n)  = commonWalk c x xs n
+        commonWalk c x xs n          = let (y,z) = walkTo c (xs,n) in
+                                         (x:y, 1+z)
