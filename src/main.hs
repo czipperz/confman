@@ -11,8 +11,8 @@ import SystemParse
 main :: IO ()
 main = do
   arg <- getArgs
-  let first  = parseS $ arg !! 0
-      second = parseS $ arg !! 1
+  let first  = parseS (arg !! 0) (length arg)
+      second = parseS (arg !! 1) (length arg)
   case length arg of
     0 -> help
     1 -> isValidOne first
@@ -38,12 +38,14 @@ removeEmptyLists []      = []
 removeEmptyLists ([]:xs) =   removeEmptyLists xs
 removeEmptyLists (x :xs) = x:removeEmptyLists xs
 
-parseS :: String -> Either String Flag
-parseS s
+parseS :: String -> Int -> Either String Flag
+parseS s 2
   | s == "-n" || s == "--nono"  = Right Nono
   | s == "-c" || s == "--clean" = Right Clean
   | s == "-h" || s == "--hard"  = Right Hard
-  | s == "--help"               = Right Help
+  | otherwise                   = Left s
+parseS s 1
+  | s == "-h" || s == "--help"  = Right Help
   | otherwise                   = Left s
 
 parseW :: [String] -> [String]
