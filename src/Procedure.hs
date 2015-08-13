@@ -18,7 +18,7 @@ procedureFlag pre Nono (src:out:xs) = do
   fileNameUn <- systemParse $ out ++ ".backup"
   exists <- doesFileExist fileNameUn
   if exists
-    then putStrLn $ "rm " ++ fileNameUn
+    then putStrLn $ "rm \"" ++ fileNameUn ++ "\""
     else return ()
   putStrLn $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedureFlag pre Nono xs
