@@ -2,12 +2,11 @@ module Procedure (procedureFlag,procedure) where
 
 import System.Directory
 import System.Process
-{- Methods to use
-    * callCommand
-    * removeFile
-    * doesFileExists
-    * copyfile
--}
+-- Methods to use
+--  * callCommand
+--  * removeFile
+--  * doesFileExists
+--  * copyfile
 import Flag
 import SystemParse
 
