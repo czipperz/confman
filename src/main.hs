@@ -17,21 +17,21 @@ main = do
     0 -> help
     1 -> isValidOne first
     2 -> isValidTwo first second
-  contents <- readFile (first <-> second)
+  contents <- readFile (first `left` second)
   let filtered = removeEmptyLists $ lines contents
       parsed   = parseW filtered
   prefix <- systemParse $ head parsed
   case length arg of
-    1 -> procedure     (prefix) (tail parsed)
-    2 -> procedureFlag (prefix) (first <+> second) (tail parsed)
+    1 -> procedure     prefix                        (tail parsed)
+    2 -> procedureFlag prefix (first `right` second) (tail parsed)
 
-(<->) :: Either t a -> Either t b -> t -- get file
-(Left x) <-> _ = x
-_ <-> (Left x) = x
+left :: Either t a -> Either t b -> t -- get file
+(Left x) `left` _ = x
+_ `left` (Left x) = x
 
-(<+>) :: Either a t -> Either b t -> t -- get flag
-(Right x) <+> _ = x
-_ <+> (Right x) = x
+right :: Either a t -> Either b t -> t -- get flag
+(Right x) `right` _ = x
+_ `right` (Right x) = x
 
 removeEmptyLists :: [[x]] -> [[x]]
 removeEmptyLists []      = []
