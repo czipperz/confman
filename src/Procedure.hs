@@ -29,8 +29,8 @@ procedureFlag pre Clean (_:out:xs) = do
     else return ()
   procedureFlag pre Clean xs
 procedureFlag pre Hard (src:out:xs) = do
-  fileNameUn <- systemParse out
-  exists <- doesFileExist $ fileNameUn ++ ".backup"
+  fileNameUn <- systemParse $ out ++ ".backup"
+  exists <- doesFileExist fileNameUn
   if exists
     then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
          fileNameUn ++ ".backup\""
