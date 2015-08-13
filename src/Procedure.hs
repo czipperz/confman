@@ -14,10 +14,11 @@ procedureFlag :: String -> Flag -> [FilePath] -> IO ()
 procedureFlag _ _ []  = return ()
 procedureFlag _ _ [_] = error "Need more than just prefix declaration"
 procedureFlag pre Nono (src:out:xs) = do
-  fileNameUn <- systemParse $ out ++ ".backup"
+  fileNameUn <- systemParse out
   exists <- doesFileExist fileNameUn
   if exists
-    then putStrLn $ "rm \"" ++ fileNameUn ++ "\""
+    then putStrLn $ "mv \"" ++ fileNameUn ++ "\" \"" ++
+         fileNameUn ++ ".backup\""
     else return ()
   putStrLn $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedureFlag pre Nono xs
@@ -29,7 +30,7 @@ procedureFlag pre Clean (_:out:xs) = do
     else return ()
   procedureFlag pre Clean xs
 procedureFlag pre Hard (src:out:xs) = do
-  fileNameUn <- systemParse $ out ++ ".backup"
+  fileNameUn <- systemParse out
   exists <- doesFileExist fileNameUn
   if exists
     then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
