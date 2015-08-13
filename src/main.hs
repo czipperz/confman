@@ -68,4 +68,4 @@ isValidTwo (Left  _) (Left  _) = error "Takes one file and possibly one option, 
 isValidOne :: Either t Flag -> IO ()
 isValidOne (Left _)     = return ()
 isValidOne (Right Help) = help
-isValidOne _            = error "Use `--help' to get help"
+isValidOne _            = error "Use ``--help'' to get help"
