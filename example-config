@@ -4,3 +4,5 @@ $HOME/dotfiles
 
 zsh/zlogin            "$HOME/.zlogin ' space"
 xinitrc               $HOME/.xinitrc
+
+$HOME-h               $HOME(h
