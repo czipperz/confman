@@ -17,8 +17,7 @@ procedureFlag pre Nono (src:out:xs) = do
   fileNameUn <- systemParse out
   exists <- doesFileExist fileNameUn
   if exists
-    then putStrLn $ "mv \"" ++ fileNameUn ++ "\" \"" ++
-         fileNameUn ++ ".backup\""
+    then putStrLn $ "mv \"" ++ fileNameUn ++ "\" \"" ++ fileNameUn ++ ".backup\""
     else return ()
   putStrLn $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedureFlag pre Nono xs
@@ -33,11 +32,9 @@ procedureFlag pre Hard (src:out:xs) = do
   fileNameUn <- systemParse out
   exists <- doesFileExist fileNameUn
   if exists
-    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
-         fileNameUn ++ ".backup\""
+    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++ fileNameUn ++ ".backup\""
     else return ()
-  callCommand $ "ln \"" ++ pre ++ "/" ++ src
-                ++ "\" \"" ++ fileNameUn ++ ".backup\""
+  callCommand $ "ln \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedureFlag pre Hard xs
 
 
@@ -48,9 +45,7 @@ procedure pre (src:out:xs) = do
   fileNameUn <- systemParse out
   exists <- doesFileExist $ fileNameUn
   if exists
-    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++
-         fileNameUn ++ ".backup\""
+    then callCommand $ "mv \"" ++ fileNameUn ++ "\" \"" ++ fileNameUn ++ ".backup\""
     else return ()
-  callCommand $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++
-    fileNameUn ++ "\""
+  callCommand $ "ln -s \"" ++ pre ++ "/" ++ src ++ "\" \"" ++ fileNameUn ++ "\""
   procedure pre xs

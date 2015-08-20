@@ -5,8 +5,9 @@ import System.Environment
 import ParseWord
 import Help
 import Flag
-import Procedure
+--import Procedure
 import SystemParse
+import GenProcedure
 
 main :: IO ()
 main = do
@@ -21,9 +22,14 @@ main = do
   let filtered = removeEmptyLists $ lines contents
       parsed   = parseW filtered
   prefix <- systemParse $ head parsed
-  case length arg of
-    1 -> procedure     prefix                        (tail parsed)
-    2 -> procedureFlag prefix (getFlag first second) (tail parsed)
+  procedure <- genProcedure prefix (tail parsed)
+  -- case length arg of
+  --   1 -> procedure     prefix                        (tail parsed)
+  --   2 -> procedureFlag prefix (getFlag first second) (tail parsed)
+  let flag = if length arg == 1
+             then Nothing
+             else Just (getFlag first second)
+  performProcedure flag procedure
 
 getFile :: Either t a -> Either t b -> t -- get file
 getFile (Left x) _ = x
