@@ -1,4 +1,5 @@
 #!/bin/bash
+make
 sudo cp confman /bin
 if [ -e /bin/zsh ]; then
     printf "ZSH is detected, will install confman completions to "
